@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Johannesburg Rentals | Find Your Next Home</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            color: #1f2937;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 22px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #111827, #374151);
+            color: white;
+            padding: 70px 7%;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            background: white;
+            max-width: 1000px;
+            margin: auto;
+            padding: 25px;
+            border-radius: 12px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        select,
+        button {
+            width: 100%;
+            padding: 13px;
+            border-radius: 7px;
+            border: 1px solid #d1d5db;
+            font-size: 15px;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .properties {
+            padding: 50px 7%;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .property-count {
+            color: #6b7280;
+        }
+
+        .property-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .property-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+
+        .property-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .property-image {
+            height: 210px;
+            background: linear-gradient(135deg, #dbeafe, #e5e7eb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4b5563;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .property-info {
+            padding: 20px;
+        }
+
+        .property-info h3 {
+            font-size: 21px;
+            margin-bottom: 8px;
+        }
+
+        .location {
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .price {
+            font-size: 21px;
+            font-weight: bold;
+            margin: 12px 0;
+        }
+
+        .types {
+            color: #4b5563;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .interest-btn {
+            margin-top: 18px;
+        }
+
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+        }
+
+        footer {
+            background: #111827;
+            color: white;
+            text-align: center;
+            padding: 35px 20px;
+            margin-top: 40px;
+        }
+
+        footer p {
+            margin: 7px;
+        }
+
+        @media (max-width: 900px) {
+
+            .search-box {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .property-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            header {
+                padding: 15px 5%;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .hero {
+                padding: 50px 5%;
+            }
+
+            .hero h2 {
+                font-size: 30px;
+            }
+
+            .search-box {
+                grid-template-columns: 1fr;
+            }
+
+            .properties {
+                padding: 40px 5%;
+            }
+
+            .property-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+   /* RENTAL ENQUIRY FORM */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.65);
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.modal-content {
+    background: white;
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 15px;
+    position: relative;
+}
+
+.modal-content h2 {
+    margin-bottom: 10px;
+}
+
+.modal-content p {
+    color: #6b7280;
+    margin-bottom: 20px;
+}
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 12px;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.modal-content label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.modal-content input,
+.modal-content select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+.modal-content button {
+    margin-top: 25px;
+}
+
+.whatsapp-btn {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    background: #25D366;
+    color: white;
+    padding: 12px;
+    border-radius: 7px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.whatsapp-btn:hover {
+    opacity: 0.9;
+}
+
+</style>
+    
+
+</head>
+
+<body>
+
+<header>
+
+    <h1>🏠 Johannesburg Rentals</h1>
+
+    <nav>
+        <a href="#">Home</a>
+        <a href="#properties">Properties</a>
+        
+        <a href="https://wa.me/27818323218" target="_blank">
+            💬 WhatsApp
+        </a>
+        <a href="mailto:Fransmoifa78@gmail.com">
+            ✉ Email
+        </a>
+        <a href="tel:0818323218">
+            📞 Call
+        </a>
+    </nav>
+
+</header>
+
+
+<section class="hero">
+
+    <h2>Find Your Next Home in Johannesburg</h2>
+
+    <p>
+        Browse available apartments and find a rental that fits your budget.
+    </p>
+
+    <div class="search-box">
+
+        <select id="areaFilter">
+            <option value="all">All Areas</option>
+            <option value="Johannesburg CBD">Johannesburg CBD</option>
+            <option value="Johannesburg Sandton">Sandton</option>
+        </select>
+
+        <select id="budgetFilter">
+            <option value="all">Any Budget</option>
+            <option value="3000">Up to R3,000</option>
+            <option value="5000">Up to R5,000</option>
+            <option value="8000">Up to R8,000</option>
+            <option value="15000">Up to R15,000</option>
+        </select>
+
+        <select id="typeFilter">
+            <option value="all">Any Apartment Type</option>
+            <option value="Room">Room</option>
+            <option value="Studio">Studio</option>
+            <option value="1 Bed">1 Bedroom</option>
+            <option value="2 Bed">2 Bedrooms</option>
+            <option value="3 Bed">3 Bedrooms</option>
+        </select>
+
+        <button onclick="filterProperties()">
+            Find Apartments
+        </button>
+
+    </div>
+
+</section>
+
+
+<section class="properties" id="properties">
+
+    <div class="section-heading">
+
+        <div>
+            <h2>Available Johannesburg Rentals</h2>
+            <p class="property-count" id="propertyCount">
+                Showing properties
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="property-grid" id="propertyGrid">
+
+
+        <!-- 260 MARSHALL -->
+
+        <div class="property-card"
+             data-area="Johannesburg CBD"
+             data-price="1980"
+             data-types="Studio 1 Bed 2 Bed Room">
+
+            <div class="property-image">
+                📸 260 Marshall
+            </div>
+
+            <div class="property-info">
+
+                <h3>260 Marshall</h3>
+
+                <p class="location">
+                    📍 Johannesburg CBD
+                </p>
+
+                <p>
+                    260 Marshall Street
+                </p>
+
+                <p class="price">
+                    From R1,980/month
+                </p>
+
+                <p class="types">
+                    Studio • 1 Bedroom • 2 Bedrooms • Room
+                </p>
+
+                <button class="interest-btn"
+                        onclick="showInterest('260 Marshall')">
+                    I'm Interested
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- BARLOW PARK A -->
+
+        <div class="property-card"
+             data-area="Johannesburg Sandton"
+             data-price="5090"
+             data-types="Studio 1 Bed 2 Bed">
+
+            <div class="property-image">
+                📸 Barlow Park Block A
+            </div>
+
+            <div class="property-info">
+
+                <h3>Barlow Park Block A</h3>
+
+                <p class="location">
+                    📍 Sandton
+                </p>
+
+                <p>
+                    180 Katherine Street
+                </p>
+
+                <p class="price">
+                    From R5,090/month
+                </p>
+
+                <p class="types">
+                    Studio • 1 Bedroom • 2 Bedrooms
+                </p>
+
+                <button class="interest-btn"
+                        onclick="showInterest('Barlow Park Block A')">
+                    I'm Interested
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- BARLOW PARK B -->
+
+        <div class="property-card"
+             data-area="Johannesburg Sandton"
+             data-price="5400"
+             data-types="Studio 1 Bed 2 Bed">
+
+            <div class="property-image">
+                📸 Barlow Park Block B
+            </div>
+
+            <div class="property-info">
+
+                <h3>Barlow Park Block B</h3>
+
+                <p class="location">
+                    📍 Sandton
+                </p>
+
+                <p>
+                    180 Katherine Street
+                </p>
+
+                <p class="price">
+                    From R5,400/month
+                </p>
+
+                <p class="types">
+                    Studio • 1 Bedroom • 2 Bedrooms
+                </p>
+
+                <button class="interest-btn"
+                        onclick="showInterest('Barlow Park Block B')">
+                    I'm Interested
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- CARLTON VIEW -->
+
+        <div class="property-card"
+             data-area="Johannesburg CBD"
+             data-price="2960"
+             data-types="Studio 1 Bed">
+
+            <div class="property-image">
+                📸 Carlton View
+            </div>
+
+            <div class="property-info">
+
+                <h3>Carlton View</h3>
+
+                <p class="location">
+                    📍 Johannesburg CBD
+                </p>
+
+                <p>
+                    36 Von Weilligh Street
+                </p>
+
+                <p class="price">
+                    From R2,960/month
+                </p>
+
+                <p class="types">
+                    Studio • 1 Bedroom
+                </p>
+
+                <button class="interest-btn"
+                        onclick="showInterest('Carlton View')">
+                    I'm Interested
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- CRESTVIEW -->
+
+        <div class="property-card"
+             data-area="Johannesburg CBD"
+             data-price="1730"
+             data-types="Studio 1 Bed 2 Bed 3 Bed Room">
+
+            <div class="property-image">
+                📸 Crestview
+            </div>
+
+            <div class="property-info">
+
+                <h3>Crestview</h3>
+
+                <p class="location">
+                    📍 Johannesburg CBD
+                </p>
+
+                <p>
+                    Cnr Tudhope & Alexandra Berea Street
+                </p>
+
+                <p class="price">
+                    From R1,730/month
+                </p>
+
+                <p class="types">
+                    Studio • 1 Bedroom • 2 Bedrooms • 3 Bedrooms • Room
+                </p>
+
+                <button class="interest-btn"
+                        onclick="showInterest('Crestview')">
+                    I'm Interested
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- DUNDONALD -->
+
+        <div class="property-card"
+             data-area="Johannesburg CBD"
+             data-price="1950"
+             data-types="Studio 1 Bed 2 Bed Room">
+
+            <div class="property-image">
+                📸 Dundonald Mansions
+            </div>
+
+            <div class="property-info">
+
+                <h3>Dundonald Mansions</h3>
+
+                <p class="location">
+                    📍 Johannesburg CBD
+                </p>
+
+                <p>
+                    272 Bree Street
+                </p>
+
+                <p class="price">
+                    From R1,950/month
+                </p>
+
+                <p class="types">
+                    Studio • 1 Bedroom • 2 Bedrooms • Room
+                </p>
+
+                <button class="interest-btn"
+                        onclick="showInterest('Dundonald Mansions')">
+                    I'm Interested
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ELEVATE -->
+
+        <div class="property-card"
+             data-area="Johannesburg CBD"
+             data-price="2999"
+             data-types="Studio 2 Bed">
+
+            <div class="property-image">
+                📸 Elevate
+            </div>
+
+            <div class="property-info">
+
+                <h3>Elevate</h3>
+
+                <p class="location">
+                    📍 Johannesburg CBD
+                </p>
+
+                <p>
+                    1 Beacon Road
+                </p>
+
+                <p class="price">
+                    From R2,999/month
+                </p>
+
+                <p class="types">
+                    Studio • 2 Bedrooms
+                </p>
+
+                <button class="interest-btn"
+                        onclick="showInterest('Elevate')">
+                    I'm Interested
+                </button>
+              
+
+</div>
+
+</div>
+ <!-- EYETHU -->
+
+        <div class="property-card"
+             data-area="Johannesburg CBD"
+             data-price="1730"
+             data-types="Studio 1 Bed 2 Bed Room">
+
+            <div class="property-image">
+                📸 Eyethu House
+            </div>
+
+            <div class="property-info">
+
+                <h3>Eyethu House</h3>
+
+                <p class="location">
+                    📍 Johannesburg CBD
+                </p>
+
+                <p>
+                    270 Marshall Street
+                </p>
+
+                <p class="price">
+                    From R1,730/month
+                </p>
+
+                <p class="types">
+                    Studio • 1 Bedroom • 2 Bedrooms • Room
+                </p>
+
+                <button class="interest-btn"
+                        onclick="showInterest('Eyethu House')">
+                    I'm Interested
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- HOFMAN -->
+
+        <div class="property-card"
+             data-area="Johannesburg CBD"
+             data-price="1450"
+             data-types="Studio 1 Bed Room">
+
+            <div class="property-image">
+                📸 Hofman New Yorker
+            </div>
+
+            <div class="property-info">
+
+                <h3>Hofman New Yorker</h3>
+
+                <p class="location">
+                    📍 Johannesburg CBD
+                </p>
+
+                <p>
+                    Cnr Kapteijn & Quartz Street
+                </p>
+
+                <p class="price">
+                    From R1,450/month
+                </p>
+
+                <p class="types">
+                    Studio • 1 Bedroom • Room
+                </p>
+
+                <button class="interest-btn"
+                        onclick="showInterest('Hofman New Yorker')">
+                    I'm Interested
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- HOOFD -->
+
+        <div class="property-card"
+             data-area="Johannesburg CBD"
+             data-price="1740"
+             data-types="Studio 1 Bed 2 Bed Room">
+
+            <div class="property-image">
+                📸 Hoofd Mansions
+            </div>
+
+            <div class="property-info">
+
+                <h3>Hoofd Mansions</h3>
+
+                <p class="location">
+                    📍 Johannesburg CBD
+                </p>
+
+                <p>
+                    23 Siemert Road
+                </p>
+
+                <p class="price">
+                    From R1,740/month
+                </p>
+
+                <p class="types">
+                    Studio • 1 Bedroom • 2 Bedrooms • Room
+                </p>
+
+                <button class="interest-btn"
+                        onclick="showInterest('Hoofd Mansions')">
+                    I'm Interested
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- METROPOLITAN -->
+
+        <div class="property-card"
+             data-area="Johannesburg CBD"
+             data-price="1090"
+             data-types="Room Studio 1 Bed 2 Bed">
+
+            <div class="property-image">
+                📸 Metropolitan
+            </div>
+
+            <div class="property-info">
+
+                <h3>Metropolitan</h3>
+
+                <p class="location">
+                    📍 Johannesburg CBD
+                </p>
+
+                <p>
+                    39 Alexandra Street
+                </p>
+
+                <p class="price">
+                    From R1,090/month
+                </p>
+
+                <p class="types">
+                    Room • Studio • 1 Bedroom • 2 Bedrooms
+                </p>
+
+                <button class="interest-btn"
+                        onclick="showInterest('Metropolitan')">
+                    I'm Interested
+                </button>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="no-results" id="noResults">
+
+        <h3>No matching apartments found.</h3>
+
+        <p>
+            Try changing your area, budget or apartment type.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- LEAD FORM -->
+
+<div id="leadModal" class="modal">
+
+    <div class="modal-content">
+
+        <span class="close" onclick="closeLeadForm()">&times;</span>
+
+        <h2>🏠 I'm Interested</h2>
+
+        <p id="selectedProperty">
+            Tell us what you're looking for.
+        </p>
+
+        <form id="leadForm">
+
+            <label>Your Name</label>
+            <input
+                type="text"
+                id="leadName"
+                placeholder="Enter your name"
+                required
+            >
+
+            <label>WhatsApp Number</label>
+            <input
+                type="tel"
+                id="leadWhatsapp"
+                placeholder="e.g. 071 234 5678"
+                required
+            >
+
+            <label>Monthly Rental Budget</label>
+            <select id="leadBudget" required>
+
+                <option value="">Select budget</option>
+                <option>Under R3,000</option>
+                <option>R3,000 - R5,000</option>
+                <option>R5,000 - R8,000</option>
+                <option>R8,000 - R10,000</option>
+                <option>R10,000 - R15,000</option>
+
+            </select>
+
+            <label>Apartment Type</label>
+            <select id="leadType" required>
+
+                <option value="">Select apartment type</option>
+                <option>Room</option>
+                <option>Studio</option>
+                <option>1 Bedroom</option>
+                <option>2 Bedrooms</option>
+                <option>3 Bedrooms</option>
+
+            </select>
+
+            <label>When do you want to move?</label>
+            <select id="leadMoveIn" required>
+
+                <option value="">Select</option>
+                <option>Immediately</option>
+                <option>Within 30 days</option>
+                <option>1 - 2 months</option>
+                <option>3+ months</option>
+
+            </select>
+
+            <button type="submit">
+                SEND MY ENQUIRY
+            </button>
+
+        </form>
+
+    </div>
+<!-- RENTAL ENQUIRY FORM -->
+
+<div id="leadModal" class="modal">
+
+    <div class="modal-content">
+
+        <span class="close" onclick="closeLeadForm()">&times;</span>
+
+        <h2>🏠 I'm Interested</h2>
+
+        <p id="selectedProperty">
+            Tell us what you are looking for.
+        </p>
+
+        <form id="leadForm">
+
+            <label>Your Name</label>
+
+            <input
+                type="text"
+                id="leadName"
+                placeholder="Enter your name"
+                required
+            >
+
+            <label>WhatsApp Number</label>
+
+            <input
+                type="tel"
+                id="leadWhatsapp"
+                placeholder="e.g. 071 234 5678"
+                required
+            >
+
+            <label>Monthly Rental Budget</label>
+
+            <select id="leadBudget" required>
+
+                <option value="">Select your budget</option>
+                <option>Under R3,000</option>
+                <option>R3,000 - R5,000</option>
+                <option>R5,000 - R8,000</option>
+                <option>R8,000 - R10,000</option>
+                <option>R10,000 - R15,000</option>
+
+            </select>
+
+            <label>Apartment Type</label>
+
+            <select id="leadType" required>
+
+                <option value="">Select apartment type</option>
+                <option>Room</option>
+                <option>Studio</option>
+                <option>1 Bedroom</option>
+                <option>2 Bedrooms</option>
+                <option>3 Bedrooms</option>
+
+            </select>
+
+            <label>When do you want to move?</label>
+
+            <select id="leadMoveIn" required>
+
+                <option value="">Select</option>
+                <option>Immediately</option>
+                <option>Within 30 days</option>
+                <option>1 - 2 months</option>
+                <option>3+ months</option>
+
+            </select>
+
+            <button type="submit">
+                SEND MY ENQUIRY
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+</div><footer id="contact">
+
+    <p><strong>Johannesburg Rentals</strong></p>
+
+    <p>
+        Independent rental referral platform
+    </p>
+
+    <p>
+        Helping prospective tenants find available rental opportunities.
+    </p>
+
+</footer>
+
+
+<script>
+
+function filterProperties() {
+
+    const area =
+        document.getElementById("areaFilter").value;
+
+    const budget =
+        document.getElementById("budgetFilter").value;
+
+    const type =
+        document.getElementById("typeFilter").value;
+
+    const cards =
+        document.querySelectorAll(".property-card");
+
+    let visible = 0;
+
+    cards.forEach(card => {
+
+        const cardArea =
+            card.dataset.area;
+
+        const cardPrice =
+            Number(card.dataset.price);
+
+        const cardTypes =
+            card.dataset.types;
+
+        let matchesArea =
+            area === "all" || cardArea === area;
+
+        let matchesBudget =
+            budget === "all" ||
+            cardPrice <= Number(budget);
+
+        let matchesType =
+            type === "all" ||
+            cardTypes.includes(type);
+
+        if (
+            matchesArea &&
+            matchesBudget &&
+            matchesType
+        ) {
+
+            card.style.display = "block";
+
+            visible++;
+
+        } else {
+
+            card.style.display = "none";
+
+        }
+
+    });
+
+    document.getElementById("propertyCount").textContent =
+        visible + " properties match your search";
+
+    document.getElementById("noResults").style.display =
+        visible === 0 ? "block" : "none";
+}
+
+
+let selectedProperty = "";
+
+function showInterest(propertyName) {
+
+    selectedProperty = propertyName;
+
+    document.getElementById("selectedProperty").textContent =
+        "You are interested in " + propertyName;
+
+    document.getElementById("leadModal").style.display = "block";
+}function chatOnWhatsApp(propertyName) {
+
+    const phone = "27818323218";
+
+    const message =
+        "Hi, I'm interested in the " +
+        propertyName +
+        " apartment in Johannesburg. Please send me more information.";
+
+    const whatsappURL =
+        "https://wa.me/" +
+        phone +
+        "?text=" +
+        encodeURIComponent(message);
+
+    window.open(whatsappURL, "_blank");
+}
+
+
+function closeLeadForm() {
+
+    document.getElementById("leadModal").style.display = "none";
+
+}
+
+
+document.getElementById("leadForm").addEventListener("submit", function(event) {
+
+    event.preventDefault();
+const scriptURL = "https://script.google.com/macros/s/AKfycbwwfqbgdysvuSFsYFvBDsFlTxA26DUQ8gv2X8N4DKQuIqglBCvf-SpfklYs6EQF3ure7w/exec";
+    const name =
+        document.getElementById("leadName").value;
+
+    const whatsapp =
+        document.getElementById("leadWhatsapp").value;
+
+    const budget =
+        document.getElementById("leadBudget").value;
+
+    const type =
+        document.getElementById("leadType").value;
+
+    const moveIn =
+        document.getElementById("leadMoveIn").value;
+
+
+   const formData = new URLSearchParams();
+
+formData.append("name", name);
+formData.append("whatsapp", whatsapp);
+formData.append("property", selectedProperty);
+formData.append("budget", budget);
+formData.append("type", type);
+formData.append("moveIn", moveIn);
+
+
+ fetch(scriptURL, {
+    method: "POST",
+    body: formData,
+    mode: "no-cors"
+})
+.then(() => {
+
+    alert(
+        "Thank you, " + name + "!\n\n" +
+        "Your enquiry has been received successfully."
+    );
+
+    document.getElementById("leadForm").reset();
+
+    closeLeadForm();
+
+})
+.catch(error => {
+
+    console.error(error);
+
+    alert(
+        "There was a problem sending your enquiry. " +
+        "Please try again."
+    );
+
+});
+});
+  
+
+
+</script>
+
+</body>
+</html>
